@@ -149,3 +149,38 @@ def count_cases(con: duckdb.DuckDBPyConnection, drug: str, reaction: str) -> Con
     c = n_reac - a
     d = total - a - b - c
     return ContingencyCounts(a=a, b=b, c=c, d=d)
+
+def read_deleted_caseids(path: Path) -> list[str]:
+    """Read case IDs from a FAERS deletion list: one ID per line, no header.
+
+    Blank lines are skipped. Any other non-numeric line raises ValueError, so a
+    changed file format fails loudly instead of deleting the wrong cases.
+    """
+    ids = []
+    with path.open(encoding="latin-1") as handle:
+        for number, line in enumerate(handle, start=1):
+            value = line.strip()
+            if not value:
+                continue
+            if not value.isdigit():
+                raise ValueError(f"{path}:{number}: expected a case ID, got {value!r}")
+            ids.append(value)
+    return ids
+
+
+def read_deleted_caseids(path: Path) -> list[str]:
+    """Read case IDs from a FAERS deletion list: one ID per line, no header.
+
+    Blank lines are skipped. Any other non-numeric line raises ValueError, so a
+    changed file format fails loudly instead of deleting the wrong cases.
+    """
+    ids = []
+    with path.open(encoding="latin-1") as handle:
+        for number, line in enumerate(handle, start=1):
+            value = line.strip()
+            if not value:
+                continue
+            if not value.isdigit():
+                raise ValueError(f"{path}:{number}: expected a case ID, got {value!r}")
+            ids.append(value)
+    return ids
