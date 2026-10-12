@@ -184,3 +184,20 @@ def read_deleted_caseids(path: Path) -> list[str]:
                 raise ValueError(f"{path}:{number}: expected a case ID, got {value!r}")
             ids.append(value)
     return ids
+
+
+
+def find_deletion_files(data_dir: Path) -> list[Path]:
+    """Return every DELETE*.txt removal list under a Deleted folder."""
+    return sorted(
+        path for path in data_dir.rglob("DELETE*.txt")
+        if any(part.lower() == "deleted" for part in path.parts)
+    )
+
+
+def load_deleted_caseids(data_dir: Path) -> set[str]:
+    """Union of the case IDs from every FAERS removal list under data_dir."""
+    ids: set[str] = set()
+    for path in find_deletion_files(data_dir):
+        ids.update(read_deleted_caseids(path))
+    return ids
