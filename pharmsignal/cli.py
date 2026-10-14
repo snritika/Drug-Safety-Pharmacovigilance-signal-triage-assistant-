@@ -10,11 +10,12 @@ from __future__ import annotations
 
 import argparse
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 from .classifier import Triage, classify
 from .labels import api_key_from_env, fetch_label
-from .retrieval import find_mentions, label_passages
+from .retrieval import find_mentions, label_coverage, label_passages
 
 DEFAULT_DATA_DIR = Path("data/faers")
 DEFAULT_DB = "data/faers.duckdb"
@@ -32,7 +33,8 @@ def triage_from_parts(
     found = bool(label_record.get("found"))
     mentions = find_mentions(label_passages(label_record), reaction) if found else []
     a, b, c, d = counts
-    return classify(a, b, c, d, mentions, found)
+    result = classify(a, b, c, d, mentions, found)
+    return replace(result, rationale=result.rationale + " " + label_coverage(label_record))
 
 
 def run_triage(

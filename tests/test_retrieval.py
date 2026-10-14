@@ -1,6 +1,6 @@
 import unittest
 
-from pharmsignal.retrieval import find_mentions, label_passages
+from pharmsignal.retrieval import find_mentions, label_coverage, label_passages
 
 RECORD = {
     "found": True,
@@ -42,6 +42,20 @@ class PassageTests(unittest.TestCase):
 
     def test_not_found_record_gives_no_passages(self):
         self.assertEqual(label_passages({"found": False, "response": None}), [])
+
+
+class CoverageTests(unittest.TestCase):
+    def test_reports_labels_and_section_counts(self):
+        text = label_coverage(RECORD)
+        self.assertIn("Searched 1 label(s)", text)
+        self.assertIn("adverse_reactions (1)", text)
+
+    def test_missing_record_says_nothing_was_searched(self):
+        self.assertIn("No label record", label_coverage({"found": False, "response": None}))
+
+    def test_label_without_searchable_sections_is_reported(self):
+        record = {"found": True, "response": {"results": [{"spl_id": "x"}]}}
+        self.assertIn("none had a searchable section", label_coverage(record))
 
 
 class MentionTests(unittest.TestCase):

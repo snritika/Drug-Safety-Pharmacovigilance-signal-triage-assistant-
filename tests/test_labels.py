@@ -73,6 +73,9 @@ class LabelTests(unittest.TestCase):
         self.assertIn("api_key=SECRET123", opener.calls[0])
         self.assertNotIn("SECRET123", (self.cache / "ibuprofen.json").read_text())
 
+    def test_requests_up_to_twenty_labels(self):
+        self.assertIn("limit=20", build_url("Ibuprofen"))
+
     def test_url_has_no_key_when_absent(self):
         self.assertNotIn("api_key", build_url("Ibuprofen"))
 

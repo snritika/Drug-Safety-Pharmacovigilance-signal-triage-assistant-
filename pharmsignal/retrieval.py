@@ -63,3 +63,23 @@ def find_mentions(passages: list[Passage], term: str) -> list[Mention]:
         elif loose.search(passage.text):
             mentions.append(Mention(passage, whole_word=False))
     return mentions
+
+
+def label_coverage(record: dict[str, Any]) -> str:
+    """Describe how much label text was searched, for the rationale."""
+    if not record.get("found") or not record.get("response"):
+        return "No label record was available to search."
+    results = record["response"].get("results") or []
+    counts: dict[str, int] = {}
+    for label in results:
+        for section in SECTIONS:
+            value = label.get(section)
+            if value:
+                counts[section] = counts.get(section, 0) + 1
+    if not counts:
+        return (
+            f"Searched {len(results)} label(s), but none had a searchable section "
+            f"({', '.join(SECTIONS)})."
+        )
+    found = ", ".join(f"{name} ({n})" for name, n in counts.items())
+    return f"Searched {len(results)} label(s). Sections found, with label counts: {found}."

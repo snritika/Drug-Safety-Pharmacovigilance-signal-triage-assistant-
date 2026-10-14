@@ -18,8 +18,13 @@ from typing import Callable
 
 LABEL_URL = "https://api.fda.gov/drug/label.json"
 API_KEY_ENV = "OPENFDA_API_KEY"
-SECTIONS = ("warnings_and_cautions", "adverse_reactions", "contraindications")
-
+MAX_LABELS = 20
+SECTIONS = (
+      "warnings_and_cautions",
+      "warnings",
+      "adverse_reactions",
+      "contraindications",
+  )
 Opener = Callable[[str], bytes]
 
 
@@ -33,7 +38,7 @@ def build_url(drug: str, api_key: str | None = None) -> str:
     """Build a label search URL matching the generic or brand name exactly."""
     term = drug.strip().replace('"', "")
     search = f'(openfda.generic_name:"{term}" OR openfda.brand_name:"{term}")'
-    params = {"search": search, "limit": "1"}
+    params = {"search": search, "limit": str(MAX_LABELS)}
     if api_key:
         params["api_key"] = api_key
     return f"{LABEL_URL}?{urllib.parse.urlencode(params)}"
