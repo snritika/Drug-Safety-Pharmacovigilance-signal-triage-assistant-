@@ -23,7 +23,8 @@ DRUG_ROLES = ("PS", "SS")  # primary and secondary suspect drugs
 QUARTER_RE = re.compile(r"([0-9]{2})[Qq]([1-4])\.txt$", re.IGNORECASE)
 
 DUCKDB_TEMP_DIR = Path("data/duckdb_tmp")
-DUCKDB_MEMORY_LIMIT = "4GB"
+DUCKDB_MEMORY_LIMIT = "2GB"
+DUCKDB_THREADS = 2
 
 
 @dataclass(frozen=True)
@@ -141,6 +142,7 @@ def open_faers(
     DUCKDB_TEMP_DIR.mkdir(parents=True, exist_ok=True)
     con = duckdb.connect(db_path)
     con.execute(f"SET memory_limit = '{DUCKDB_MEMORY_LIMIT}'")
+    con.execute(f"SET threads = {DUCKDB_THREADS}")
     con.execute(f"SET temp_directory = {sql_literal(str(DUCKDB_TEMP_DIR))}")
     for table in TABLES:
         _load_raw_table(con, table, find_table_files(data_dir, table))
