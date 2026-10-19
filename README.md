@@ -1,5 +1,37 @@
 # Drug Safety Signal Triage Assistant
 
+https://open.fda.gov/data/faers/
+
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="240" viewBox="0 0 960 240" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f2747"/>
+      <stop offset="1" stop-color="#1f6f8b"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="240" rx="16" fill="url(#bg)"/>
+
+  <!-- signal bars: a quiet baseline with one spike -->
+  <g fill="#ffffff" fill-opacity="0.18">
+    <rect x="560" y="170" width="18" height="30" rx="3"/>
+    <rect x="590" y="160" width="18" height="40" rx="3"/>
+    <rect x="620" y="172" width="18" height="28" rx="3"/>
+    <rect x="650" y="164" width="18" height="36" rx="3"/>
+    <rect x="680" y="168" width="18" height="32" rx="3"/>
+    <rect x="740" y="162" width="18" height="38" rx="3"/>
+    <rect x="770" y="170" width="18" height="30" rx="3"/>
+    <rect x="800" y="166" width="18" height="34" rx="3"/>
+    <rect x="830" y="170" width="18" height="30" rx="3"/>
+  </g>
+  <rect x="710" y="82" width="18" height="118" rx="3" fill="#f6ad55"/>
+  <circle cx="719" cy="74" r="9" fill="#f6ad55"/>
+
+  <text x="60" y="108" font-size="56" font-weight="bold" fill="#ffffff">FAERS Signal Triage</text>
+  <text x="60" y="150" font-size="22" fill="#cfe8f3">Spot unusual drug-reaction patterns. Check the label. Review the evidence.</text>
+  <text x="60" y="196" font-size="16" fill="#9fc9db">Statistics and rules only · for human review, not safety decisions</text>
+</svg>
+
 A Python tool that helps pharmacovigilance reviewers decide which drug-reaction pairs need a closer look. It reads FDA Adverse Event Reporting System (FAERS) quarterly data, calculates disproportionality statistics, checks the FDA drug label, and assigns each pair to one of three categories with a cited rationale.
 
 **Please note - This tool generates hypotheses for human review. It does not establish causation or make a safety decision.**
